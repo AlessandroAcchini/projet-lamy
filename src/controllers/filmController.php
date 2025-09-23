@@ -101,17 +101,23 @@ function showFilm() {
  */
 function createFilm() {
     $genres = getAllGenres();
+      if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $film = [
+            'titre' => trim($_POST['titre'] ?? ''),
+            'realisateur' => trim($_POST['realisateur'] ?? ''),
+            'annee' => (int)($_POST['annee'] ?? 0),
+            'duree' => (int)($_POST['duree'] ?? 0),
+            'synopsis' => trim($_POST['synopsis'] ?? ''),
+            'genre_id' => (int)($_POST['genre_id'] ?? 0),
+            'note' => $_POST['note'] !== '' ? floatval($_POST['note']) : null,
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ];
 
-    // Détection de la soumission
-    // A FAIRE
-
-    // Gestion des erreurs de chargement des données
-    if ($genres === false) {
-        setErrorMessage("Erreur lors du chargement des genres");
-        header("Location: index.php?action=index");
-        exit;
+        if (empty($errors)) {
+            $result = createFilmData($film);
+        }
     }
-
     include __DIR__ . '/../../templates/films/create.php';
 }
 
