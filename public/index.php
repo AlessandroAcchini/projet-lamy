@@ -19,8 +19,84 @@ require_once __DIR__ . '/../src/controllers/genreController.php';
 // Récupération de l'action demandée
 $action = $_GET['action'] ?? 'index';
 
+// Pour ajouter une nouvelle route il suffit de ... 
+$routes = [
+    'index' => [
+        'fonction' => 'indexFilms',
+        'methodes' => ['GET']
+    ],
+    
+    'show' => [
+        'fonction' => 'showfilm',
+        'methodes' => ['GET']
+    ],
+
+    'create' => [
+        'fonction' => 'createfilm',
+        'methodes' => ['GET', 'POST']
+    ],
+
+    'edit' => [
+        'fonction' => 'editfilm',
+        'methodes' => ['GET', 'POST']
+    ],
+
+    'delete' => [
+        'fonction' => 'deletefilm',
+        'methodes' => ['GET']
+    ],
+
+    'search' => [
+        'fonction' => 'searchfilm',
+        'methodes' => ['GET']
+    ],
+
+    'genres' => [
+        'fonction' => 'listeGenres',
+        'methodes' => ['GET']
+    ],
+];
+
+
+if (array_key_exists($action, $routes)) {
+    $fonction = $routes[$action]['fonction'];
+    $methodesAutorisees = $routes[$action]['methodes'];
+    $methodeActuelle = $_SERVER['REQUEST_METHOD'];
+
+    if (!in_array($methodeActuelle, $methodesAutorisees)) {
+        // Méthode non autorisée pour cette route
+        header("HTTP/1.1 405 Method Not Allowed");
+        echo "Méthode $methodeActuelle non autorisée pour cette action. Seulement autorisé pour $methodesAutorisees";
+        exit;
+    }
+
+    if (function_exists($fonction)) {
+        $fonction();
+    } else {
+        header("Location: index.php?action=index");
+        exit;
+    }
+} else {
+    header("Location: index.php?action=index");
+    exit;
+}
+
+
+/*if (array_key_exists($action, $routes)){
+   $fonction = $routes[$action]['fonction'];
+   if (function_exists($fonction)){
+   $fonction();
+   }else{
+    header("Location: index.php?action=index");
+    exit;
+   }
+} else {
+    header("Location: index.php?action=index");
+    exit;
+}*/
+
 // Routage des actions - les contrôleurs gèrent leurs propres paramètres
-switch ($action) {
+/*switch ($action) {
     case 'index':
         indexFilms();
         break;
@@ -54,3 +130,4 @@ switch ($action) {
         header("Location: index.php?action=index");
         exit;
 }
+*/
