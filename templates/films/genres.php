@@ -4,7 +4,7 @@ ob_start();
 ?>
 
 <?php foreach($genres as $genre): ?>
-	<?= htmlspecialchars($genre['nom']) ?> <?= htmlspecialchars($genre['description']) ?><br><br>
+	<?= htmlspecialchars($genre['nom']) ?> : <?= htmlspecialchars($genre['description']) ?><br><br>
 <?php endforeach; ?>
 
 
